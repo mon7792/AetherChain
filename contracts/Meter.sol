@@ -5,7 +5,7 @@ contract Meter {
   struct Reading {
     uint muid;
     string mkeyhash;
-    string reading;
+    uint reading;
     string timestamp;
     bool activated;
   }
@@ -16,28 +16,28 @@ contract Meter {
   /* Store the Meter Count */
   mapping (uint => Reading) public readingList;
 
-  /* Store account has voted */
-  mapping (address => bool) public validList;
-
-  /* function validMeter(uint _muid, string memory _mhash) public {
-
-    require(hashCompare(_mhash,readingList[_muid].mkeyhash) == true);
-    validList[msg.sender] = true;
-  }
-
-  function hashCompare(Reading storage a, string memory b) internal returns (bool) {
-    return keccak256(abi.encodePacked(_first.age, _first.name)) == keccak256(b);
-} */
-function getHash(uint _muid) private view returns (string memory){
-  return readingList[_muid].mkeyhash;
+/* Returns the hash value based on the the muid  */
+function getHash(uint _id) private view returns (string memory){
+  return readingList[_id].mkeyhash;
+}
+function hashcheck(uint _id, string memory _hash) private returns (bool) {
+  return  (keccak256(abi.encodePacked((_hash))) == keccak256(abi.encodePacked((getHash(_id)))) );
 }
 
-function createAuthorizedMeter(uint _muid, string memory _hash, string memory _reading, string memory _timestamp, bool status) private {
+function writeMeter(uint _id, uint _muid, uint _reading,string memory _hash)public{
+  require(hashcheck(_id, _hash));
+  readingList[_id].reading += _reading;
+}
+
+function createAuthorizedMeter(uint _muid, string memory _hash, uint _reading, string memory _timestamp, bool status) private {
   meterCount++;
   readingList[meterCount] = Reading(_muid,_hash,_reading,_timestamp,status);
 }
 
 constructor() public {
-  createAuthorizedMeter(111, "hash1","30", "12:00:01",true);
+  createAuthorizedMeter(111, "hash1",30, "12:00:01",true);
+  createAuthorizedMeter(222, "hash2",30, "12:00:01",true);
+  createAuthorizedMeter(333, "hash3",30, "12:00:01",true);
+  createAuthorizedMeter(444, "hash4",30, "12:00:01",true);
 }
 }
