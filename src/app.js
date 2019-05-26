@@ -129,6 +129,9 @@ App = {
         loader.hide()
         content.show()
       }
+    },
+    readReading: function(){
+      console.log("call from the client");
     }
   }
 
