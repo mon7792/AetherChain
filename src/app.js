@@ -1,6 +1,7 @@
 App = {
   loading: false,
   contracts: {},
+  // account:,
   load: async () => {
     await App.loadWeb3()
     await App.loadAccount()
@@ -131,7 +132,21 @@ App = {
       }
     },
     readReading: function(){
-      console.log("call from the client");
+      console.log("call from the client 1");
+
+      var meterInst = App.meterList;
+      // uint _id, uint _muid, uint _reading,string memory _hash
+      meterInst.writeMeter(1,111,50,"hash1",{from: App.account})
+      console.log(App.account)
+
+    },
+    readReading2: function () {
+      console.log("call from the client 1");
+
+      var metInst = App.meterList;
+      // uint _id, uint _muid, uint _reading,string memory _hash
+      metInst.writeMeter(2,222,20,"hash2",{from: App.account})
+      console.log(App.account)
     }
   }
 
